@@ -26,6 +26,8 @@ namespace SolutionFamily.Lumada
         {
             APIRoot = apiRoot;
             APIVersion = apiVersion;
+
+            m_client = new HttpClient();
         }
 
         public bool IgnoreCertificateErrors
@@ -69,18 +71,37 @@ namespace SolutionFamily.Lumada
             values.Add("scope", "all");
             var payload = GenerateUrlEncodedBody(values);
 
-            var response = await PostAsync<AuthenticationResponse>(path, payload);
+            try
+            {
+                var response = await PostAsync<AuthenticationResponse>(path, payload);
 
-            var session = new Session(this, clientID, response.SessionID, response.AccessToken, response.RefreshToken, response.Expiry);
+                var session = new Session(this, clientID, response.SessionID, response.AccessToken, response.RefreshToken, response.Expiry);
 
-            return session;
+                return session;
+            }
+            catch (ServerUnavailableException sue)
+            {
+                throw sue;
+            }
+            catch (Exception ex)
+            {
+                // TODO: turn into meaninfule lumada exception
+                throw;
+            }
         }
 
         internal async Task<AuthenticationResponse> RefreshSessionAsync(string refreshToken, string clientID)
         {
             var path = string.Format("{0}security/oauth/token", APIRoot);
 
-            var response = await GetAsync<AuthenticationResponse>(path);
+            var values = new Dictionary<string, string>();
+            values.Add("grant_type", "refreshToken");
+            values.Add("refresh_token", refreshToken);
+            values.Add("scope", "all");
+            var payload = GenerateUrlEncodedBody(values);
+
+            var response = await PostAsync<AuthenticationResponse>(path, payload);
+
             return response;
         }
 
@@ -287,6 +308,12 @@ namespace SolutionFamily.Lumada
                 .ContinueWith(async (response) =>
                 {
                     var json = await response.Result.Content.ReadAsStringAsync();
+                    if (json.StartsWith("<html>", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // the server returned an html error page, not actual JSON
+                        // TODO: parse the HTML for more info?
+                        throw new ServerUnavailableException();
+                    }
                     var entity = JsonConvert.DeserializeObject<T>(json);
                     return entity;
                 });

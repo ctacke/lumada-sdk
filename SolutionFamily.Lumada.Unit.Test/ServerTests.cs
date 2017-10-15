@@ -22,6 +22,27 @@ namespace SolutionFamily.Lumada.Unit.Test
         }
 
         [TestMethod]
+        public void TestBadServerSession()
+        {
+            var server = new Server("192.168.0.212");
+            server.IgnoreCertificateErrors = true;
+            var info = AsyncHelper.RunSync(() =>
+            {
+                try
+                {
+                    var session = server.CreateSessionAsync("admin", "lumada123!");
+                    return session;
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+            }
+            );
+            Assert.IsNotNull(info);
+        }
+
+        [TestMethod]
         public void TestCreateSession()
         {
             var server = new Server("192.168.10.212");

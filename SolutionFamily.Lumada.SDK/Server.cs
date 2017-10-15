@@ -60,7 +60,20 @@ namespace SolutionFamily.Lumada
 
         public async Task<Session> CreateSessionAsync(string username, string password, string clientID = "lumada-ui")
         {
-            return await m_requestService.CreateSessionAsync(username, password, clientID);
+            try
+            {
+                return await m_requestService.CreateSessionAsync(username, password, clientID);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException is HttpRequestException)
+                {
+                    var he = ex.InnerException as HttpRequestException;
+
+                    throw new ServerTimeoutException(he.InnerException.Message);
+                }
+                return null;
+            }
         }
     }
 }
