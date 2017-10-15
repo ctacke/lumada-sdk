@@ -16,14 +16,19 @@ namespace SolutionFamily.Lumada
             m_session = session;
         }
 
-        public async Task UploadAssetState(Asset asset, AssetToken token, object stateData)
+        public async Task UploadAssetStateAsync(Asset asset, AssetToken token, object stateData)
         {
-            await UploadAssetState(asset.AssetID, token, stateData);
+            await UploadAssetStateAsync(asset.AssetID, token, stateData);
         }
 
-        public async Task UploadAssetState(string assetID, AssetToken token, object stateData)
+        public async Task UploadAssetStateAsync(string assetID, AssetToken token, object stateData)
         {
-            await m_session.RequestService.UploadAssetState(assetID, token, stateData);
+            await m_session.RequestService.UploadAssetStateAsync(assetID, token, stateData);
+        }
+
+        public async Task UploadAssetStateAsync(string assetID, AssetToken token, Dictionary<string, object> stateData)
+        {
+            await m_session.RequestService.UploadAssetStateAsync(assetID, token, stateData);
         }
     }
 }

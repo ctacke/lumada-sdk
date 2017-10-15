@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -140,15 +142,33 @@ namespace SolutionFamily.Lumada
             return response;
         }
 
-        internal async Task UploadAssetState(string assetID, AssetToken token, object stateData)
+        internal async Task UploadAssetStateAsync(string assetID, AssetToken token, object stateData)
         {
             var path = string.Format("{0}asset-connectivity/assets/{1}/state", APIRoot, assetID);
             var payload = JsonConvert.SerializeObject(stateData);
-
             var hash = token.AuthHash.Replace("DEVICEHASH ", string.Empty);
+
             await PostAsync(
                 path,
                 payload, 
+                "application/json",
+                new AuthenticationHeaderValue("devicehash", hash));
+        }
+
+        internal async Task UploadAssetStateAsync(string assetID, AssetToken token, Dictionary<string, object> stateData)
+        {
+            var path = string.Format("{0}asset-connectivity/assets/{1}/state", APIRoot, assetID);
+            var payload = new JObject();
+            var hash = token.AuthHash.Replace("DEVICEHASH ", string.Empty);
+
+            foreach (var datum in stateData)
+            {
+                payload.Add(datum.Key, new JValue(datum.Value));
+            }
+
+            await PostAsync(
+                path,
+                payload.ToString(),
                 "application/json",
                 new AuthenticationHeaderValue("devicehash", hash));
         }
@@ -246,6 +266,7 @@ namespace SolutionFamily.Lumada
                     .ContinueWith(async (response) =>
                     {
                         var json = await response.Result.Content.ReadAsStringAsync();
+                        Debug.WriteLine(json);
                     });
 
                 await task;

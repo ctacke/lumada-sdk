@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTests.cs" />
     <Compile Include="AssetTests.cs" />
     <Compile Include="AssetTypeTests.cs" />
     <Compile Include="ServerTests.cs" />
