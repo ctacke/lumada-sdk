@@ -8,6 +8,7 @@ namespace SolutionFamily.Lumada
     {
         public string AssetTypeID { get; internal set; }
         public int Version { get; internal set; }
+        public string Name { get; set; }
         public DateTime CreateDate { get; internal set; }
         public DateTime ModifiedDate { get; internal set; }
 
