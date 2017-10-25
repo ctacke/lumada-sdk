@@ -26,7 +26,7 @@ namespace SolutionFamily.Lumada
                         Version = a.Version,
                         CreateDate = a.Created.ToDateTimeFromEpochMilliseconds(),
                         ModifiedDate = a.Modified.ToDateTimeFromEpochMilliseconds(),
-                        Template = JsonConvert.DeserializeObject<AssetTemplate>(a.Template),
+                        Template = a.Template == null ? null : JsonConvert.DeserializeObject<AssetTemplate>(a.Template),
                         PictureID = a.PictureID
                     })
                    .ToArray();
