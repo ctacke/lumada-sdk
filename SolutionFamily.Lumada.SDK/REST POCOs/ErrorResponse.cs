@@ -13,5 +13,9 @@ namespace SolutionFamily.Lumada
 {
     internal class ErrorResponse
     {
+        [JsonProperty(PropertyName = "code", Required = Required.Always)]
+        public int Code { get; set; }
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
     }
 }

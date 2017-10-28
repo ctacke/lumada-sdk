@@ -85,7 +85,7 @@ namespace SolutionFamily.Lumada
             }
             catch (Exception ex)
             {
-                // TODO: turn into meaninfule lumada exception
+                // TODO: turn into meaningful lumada exception
                 throw;
             }
         }
@@ -330,8 +330,23 @@ namespace SolutionFamily.Lumada
                     .ContinueWith(async (response) =>
                     {
                         var json = await response.Result.Content.ReadAsStringAsync();
-                        var entity = JsonConvert.DeserializeObject<T>(json);
-                        return entity;
+                        try
+                        {
+                            var entity = JsonConvert.DeserializeObject<T>(json);
+                            return entity;
+                        }
+                        catch (JsonSerializationException ex)
+                        {
+                            try
+                            {
+                                var error = JsonConvert.DeserializeObject<ErrorResponse>(json);
+                                throw new ServerException(error);
+                            }
+                            catch
+                            {
+                                throw ex;
+                            }
+                        }
                     });
 
                 return await task;

@@ -16,6 +16,17 @@ namespace SolutionFamily.Lumada
         }
     }
 
+    public class ServerException : LumadaExceptionBase
+    {
+        public int Code { get; private set; }
+
+        internal ServerException(ErrorResponse response)
+            : base(response.Message)
+        {
+            Code = response.Code;
+        }
+    }
+
     public class ServerUnavailableException : LumadaExceptionBase
     {
     }

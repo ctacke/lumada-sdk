@@ -7,7 +7,7 @@ namespace SolutionFamily.Lumada
 {
     internal class AssetResponse
     {
-        [JsonProperty(PropertyName = "id")]
+        [JsonProperty(PropertyName = "id", Required = Required.Always)]
         public string ID { get; set; }
         [JsonProperty(PropertyName = "version")]
         public int Version { get; set; }

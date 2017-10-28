@@ -61,6 +61,30 @@ namespace SolutionFamily.Lumada
             return response.ToAsset();
         }
 
+        public async Task UpdatePropertiesAsync(Asset asset, IEnumerable<AssetProperty> newProperties)
+        {
+            var p = new
+            {
+                properties = (from ap in newProperties
+                              select new AssetPropertyResponse()
+                              {
+                                  Name = ap.Name,
+                                  Value = ap.Value
+                              }).ToArray()
+            };
+
+            var json = JsonConvert.SerializeObject(p);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            var encoded = Convert.ToBase64String(bytes, 0, bytes.Length);
+
+            var payload = new
+            {
+                op = "replace",
+                path = "/properties",
+                value = encoded
+            };
+        }
+
         public async Task DeleteAsync(Asset asset)
         {
             await DeleteAsync(asset.AssetID);

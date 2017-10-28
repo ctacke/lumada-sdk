@@ -13,10 +13,12 @@ namespace SolutionFamily.Lumada
 
     internal class AssetTypeResponse
     {
-        [JsonProperty(PropertyName = "id")]
+        [JsonProperty(PropertyName = "id", Required = Required.Always)]
         public string AssetTypeID { get; set; }
         [JsonProperty(PropertyName = "version")]
         public int Version { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
         [JsonProperty(PropertyName = "template")]
         public string Template { get; set; }
         [JsonProperty(PropertyName = "pictureId")]

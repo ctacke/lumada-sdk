@@ -20,15 +20,7 @@ namespace SolutionFamily.Lumada
         {
             var at = await m_session.RequestService.GetAssetTypesAsync(m_session.AccessToken);
             return (from a in at
-                    select new AssetType()
-                    {
-                        AssetTypeID = a.AssetTypeID,
-                        Version = a.Version,
-                        CreateDate = a.Created.ToDateTimeFromEpochMilliseconds(),
-                        ModifiedDate = a.Modified.ToDateTimeFromEpochMilliseconds(),
-                        Template = a.Template == null ? null : JsonConvert.DeserializeObject<AssetTemplate>(a.Template),
-                        PictureID = a.PictureID
-                    })
+                    select a.ToAssetType())
                    .ToArray();
         }
 
@@ -46,15 +38,7 @@ namespace SolutionFamily.Lumada
             };
 
             var response = await m_session.RequestService.AddAssetTypeAsync(request, m_session.AccessToken);
-            return new AssetType()
-            {
-                AssetTypeID = response.AssetTypeID,
-                Version = response.Version,
-                CreateDate = response.Created.ToDateTimeFromEpochMilliseconds(),
-                ModifiedDate = response.Modified.ToDateTimeFromEpochMilliseconds(),
-                Template = JsonConvert.DeserializeObject<AssetTemplate>(response.Template),
-                PictureID = response.PictureID
-            };
+            return response.ToAssetType();
         }
 
         public async Task DeleteAsync(AssetType assetType)
