@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace SolutionFamily.Lumada
@@ -13,6 +15,17 @@ namespace SolutionFamily.Lumada
 
         public LumadaExceptionBase()
         {
+        }
+    }
+
+    public class CommunicationException : LumadaExceptionBase
+    {
+        public HttpStatusCode StatusCode { get; private set; }
+
+        internal CommunicationException(HttpResponseMessage response)
+            : base(response.ReasonPhrase)
+        {
+            StatusCode = response.StatusCode;
         }
     }
 

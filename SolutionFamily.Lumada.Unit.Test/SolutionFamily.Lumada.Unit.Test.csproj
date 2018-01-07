@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionFamily.Lumada.SDK\SolutionFamily.Lumada.SDK.csproj">
-      <Project>{558e0ce9-667d-459b-9dab-5df3603c640f}</Project>
+      <Project>{e319b484-1bb4-4cda-ab05-68bc8bc6436c}</Project>
       <Name>SolutionFamily.Lumada.SDK</Name>
     </ProjectReference>
   </ItemGroup>

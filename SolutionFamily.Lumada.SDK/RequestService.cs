@@ -68,6 +68,7 @@ namespace SolutionFamily.Lumada
             values.Add("client_id", clientID);
             values.Add("username", username);
             values.Add("password", password);
+            values.Add("realm", "local");
             values.Add("scope", "all");
             var payload = GenerateUrlEncodedBody(values);
 
@@ -329,6 +330,12 @@ namespace SolutionFamily.Lumada
                 var task = await m_client.SendAsync(request)
                     .ContinueWith(async (response) =>
                     {
+                        if (!response.Result.IsSuccessStatusCode)
+                        {
+                            Debug.WriteLine(path);
+                            throw new CommunicationException(response.Result);
+                        }
+
                         var json = await response.Result.Content.ReadAsStringAsync();
                         try
                         {

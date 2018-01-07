@@ -19,6 +19,7 @@ namespace SolutionFamily.Lumada
         public async Task<Asset[]> GetAllAsync()
         {
             var at = await m_session.RequestService.GetAssetsAsync(m_session.AccessToken);
+            if (at == null) return null;
             return (from a in at
                     select a.ToAsset())
                    .ToArray();

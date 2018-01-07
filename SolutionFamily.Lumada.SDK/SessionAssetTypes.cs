@@ -19,6 +19,7 @@ namespace SolutionFamily.Lumada
         public async Task<AssetType[]> GetAllAsync()
         {
             var at = await m_session.RequestService.GetAssetTypesAsync(m_session.AccessToken);
+            if (at == null) return null;
             return (from a in at
                     select a.ToAssetType())
                    .ToArray();

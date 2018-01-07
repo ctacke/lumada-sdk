@@ -8,10 +8,12 @@ namespace SolutionFamily.Lumada.Unit.Test
     [TestClass]
     public class ServerTests
     {
+        private const string SERVER_ADDRESS = "http://192.168.10.230:8051";
+
         [TestMethod]
         public void TestServerInfo()
         {
-            var server = new Server("192.168.10.212");
+            var server = new Server(SERVER_ADDRESS);
             server.IgnoreCertificateErrors = true;
             var info = AsyncHelper.RunSync(() =>
                 {
@@ -45,7 +47,7 @@ namespace SolutionFamily.Lumada.Unit.Test
         [TestMethod]
         public void TestCreateSession()
         {
-            var server = new Server("192.168.10.212");
+            var server = new Server(SERVER_ADDRESS);
             server.IgnoreCertificateErrors = true;
             var info = AsyncHelper.RunSync(() =>
             {
